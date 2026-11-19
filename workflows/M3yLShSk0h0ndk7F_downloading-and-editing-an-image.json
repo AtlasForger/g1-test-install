@@ -1,0 +1,121 @@
+{
+  "id": "M3yLShSk0h0ndk7F",
+  "name": "Downloading and editing an image",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-17T07:59:07.475Z",
+  "updatedAt": "2026-11-07T18:10:19.494Z",
+  "isArchived": false,
+  "versionId": "f2b7ab4c-c9e2-44e6-9e28-078beebaf1b8",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f37d5934-8999-408e-9978-b4efca4ede29",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/apis/dog-images",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8d37a294-1d2f-4123-8dca-2fa73651b3c9",
+      "name": "GetDogURL"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "c3c0a33a-0ec5-4ecd-a2d7-3dd0e8ab5609",
+      "name": "GetDogImage"
+    },
+    {
+      "parameters": {
+        "operation": "rotate",
+        "rotate": 180,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "c39f0ec5-b20d-496b-bd35-b41200f8e8a9",
+      "name": "Rotate180"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "GetDogURL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDogURL": {
+      "main": [
+        [
+          {
+            "node": "GetDogImage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDogImage": {
+      "main": [
+        [
+          {
+            "node": "Rotate180",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "M3yLShSk0h0ndk7F",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-17T07:59:07.483Z",
+      "updatedAt": "2026-09-17T07:59:07.483Z"
+    }
+  ],
+  "activeVersion": null
+}
