@@ -1,0 +1,385 @@
+{
+  "id": "5vwzOuwgAujSI2T9",
+  "name": "Section 2 - Error Handler (Error Workflow)",
+  "active": true,
+  "activeVersionId": "e4f9877d-46e9-4d54-93dc-ab2f97837e58",
+  "createdAt": "2026-10-26T10:38:34.681Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "e4f9877d-46e9-4d54-93dc-ab2f97837e58",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c6a9dc2a-77d5-44a6-b9fc-a96d49a1bfab",
+      "name": "TriggerError"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://learn.app.n8n.cloud/webhook/course/n8n103/error-report",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Assessment-ID",
+              "value": "54664f2893456a49c957735a7ba4f4bf"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "workflow_name",
+              "value": "={{ $json.workflow.name }}"
+            },
+            {
+              "name": "workflow_id",
+              "value": "={{ $json.workflow.id }}"
+            },
+            {
+              "name": "execution_url",
+              "value": "={{ $json.execution.url }}"
+            },
+            {
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}"
+            },
+            {
+              "name": "failed_node",
+              "value": "={{ $json.execution.lastNodeExecuted }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "1b97e65a-cd70-4463-ba50-3a9570652725",
+      "name": "ReportError",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vzsboFVtCA88uCQM",
+          "name": "n8n Academy API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "087efa15-f972-4631-ac79-74570f508617",
+              "name": "text",
+              "value": "=Workflow \"{{ $('TriggerError').item.json.workflow.name }}\" failed at node \"{{ $('TriggerError').item.json.execution.lastNodeExecuted }}\": {{ $('TriggerError').item.json.execution.error.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "4b17f886-e700-48d4-be96-fd4e40fe7caa",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "8c1c8f98-e1c0-41e3-bfaa-3165d33075ae",
+      "name": "SendToSlack"
+    },
+    {
+      "parameters": {
+        "content": "this would connect to a Slack node in production",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        176
+      ],
+      "id": "e9cb6658-61af-45c2-95dd-a62442d757b5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Section 2 - Error Handler (Error Workflow)\n\nOwned By: Your Name\nLast Updated: Date\n\nError workflow that captures failures from linked workflows and\nreports error details to the Academy endpoint.\n\n## Trigger\n- Error Trigger: Fires when a linked workflow fails in production\n\n## Data Captured\n- workflow.name: Name of failed workflow\n- workflow.id: Workflow ID\n- execution.url: Link to failed execution\n- execution.error.message: Error details\n- execution.lastNodeExecuted: Node that failed\n\n## Endpoint\n- POST /webhook/course/n8n103/error-report\n\n## Requirements\n- Must be published to be used as an error workflow\n- Only triggers on production executions, not manual tests\n\nPart of: n8n Foundations Program, N8N103 Course, Section 2",
+        "height": 560,
+        "width": 1392
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        -144
+      ],
+      "id": "28a739ca-f55f-4e58-a705-7e3f28382777",
+      "name": "Sticky Note1"
+    }
+  ],
+  "connections": {
+    "TriggerError": {
+      "main": [
+        [
+          {
+            "node": "ReportError",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReportError": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "SendToSlack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [
+    {
+      "id": "4CcZvu4AebBPzF9o",
+      "name": "n8n103",
+      "createdAt": "2026-10-18T16:49:32.511Z",
+      "updatedAt": "2026-10-18T16:49:32.511Z"
+    }
+  ],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "5vwzOuwgAujSI2T9",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-10-26T10:38:34.686Z",
+      "updatedAt": "2026-10-26T10:38:34.686Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "e4f9877d-46e9-4d54-93dc-ab2f97837e58",
+    "workflowId": "5vwzOuwgAujSI2T9",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "c6a9dc2a-77d5-44a6-b9fc-a96d49a1bfab",
+        "name": "TriggerError"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://learn.app.n8n.cloud/webhook/course/n8n103/error-report",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-Assessment-ID",
+                "value": "54664f2893456a49c957735a7ba4f4bf"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "workflow_name",
+                "value": "={{ $json.workflow.name }}"
+              },
+              {
+                "name": "workflow_id",
+                "value": "={{ $json.workflow.id }}"
+              },
+              {
+                "name": "execution_url",
+                "value": "={{ $json.execution.url }}"
+              },
+              {
+                "name": "error_message",
+                "value": "={{ $json.execution.error.message }}"
+              },
+              {
+                "name": "failed_node",
+                "value": "={{ $json.execution.lastNodeExecuted }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          224,
+          0
+        ],
+        "id": "1b97e65a-cd70-4463-ba50-3a9570652725",
+        "name": "ReportError",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "vzsboFVtCA88uCQM",
+            "name": "n8n Academy API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "087efa15-f972-4631-ac79-74570f508617",
+                "name": "text",
+                "value": "=Workflow \"{{ $('TriggerError').item.json.workflow.name }}\" failed at node \"{{ $('TriggerError').item.json.execution.lastNodeExecuted }}\": {{ $('TriggerError').item.json.execution.error.message }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.5,
+        "position": [
+          448,
+          0
+        ],
+        "id": "4b17f886-e700-48d4-be96-fd4e40fe7caa",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          672,
+          0
+        ],
+        "id": "8c1c8f98-e1c0-41e3-bfaa-3165d33075ae",
+        "name": "SendToSlack"
+      },
+      {
+        "parameters": {
+          "content": "this would connect to a Slack node in production",
+          "height": 80,
+          "width": 160
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          640,
+          176
+        ],
+        "id": "e9cb6658-61af-45c2-95dd-a62442d757b5",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "# Section 2 - Error Handler (Error Workflow)\n\nOwned By: Your Name\nLast Updated: Date\n\nError workflow that captures failures from linked workflows and\nreports error details to the Academy endpoint.\n\n## Trigger\n- Error Trigger: Fires when a linked workflow fails in production\n\n## Data Captured\n- workflow.name: Name of failed workflow\n- workflow.id: Workflow ID\n- execution.url: Link to failed execution\n- execution.error.message: Error details\n- execution.lastNodeExecuted: Node that failed\n\n## Endpoint\n- POST /webhook/course/n8n103/error-report\n\n## Requirements\n- Must be published to be used as an error workflow\n- Only triggers on production executions, not manual tests\n\nPart of: n8n Foundations Program, N8N103 Course, Section 2",
+          "height": 560,
+          "width": 1392
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -528,
+          -144
+        ],
+        "id": "28a739ca-f55f-4e58-a705-7e3f28382777",
+        "name": "Sticky Note1"
+      }
+    ],
+    "connections": {
+      "TriggerError": {
+        "main": [
+          [
+            {
+              "node": "ReportError",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ReportError": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "SendToSlack",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "ATLAS FORGER",
+    "name": "Version e4f9877d",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-10-26T15:01:03.384Z",
+    "updatedAt": "2026-10-31T10:08:46.000Z"
+  }
+}
