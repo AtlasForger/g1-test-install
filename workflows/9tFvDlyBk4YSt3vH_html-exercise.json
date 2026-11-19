@@ -1,0 +1,111 @@
+{
+  "id": "9tFvDlyBk4YSt3vH",
+  "name": "HTML exercise",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-15T20:33:42.271Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "d02bf139-3d63-40f2-8ac4-7f23afb116cc",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c5aae341-cfc5-4613-abd9-fc41aed9f74d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://blog.n8n.io/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e8b70623-808b-4abc-9cf5-5e35a717ed77",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": ".post .item-title a",
+              "returnValue": "html",
+              "returnArray": true
+            },
+            {
+              "key": "url",
+              "cssSelector": ".item-title a",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "128c538b-22d7-4211-9027-abd592389611",
+      "name": "HTML"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "9tFvDlyBk4YSt3vH",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-15T20:33:42.274Z",
+      "updatedAt": "2026-09-15T20:33:42.274Z"
+    }
+  ],
+  "activeVersion": null
+}
