@@ -1,0 +1,125 @@
+{
+  "id": "QNKyFb8USmRQS98Q",
+  "name": "Merging data",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-17T08:24:01.408Z",
+  "updatedAt": "2026-11-07T18:10:19.494Z",
+  "isArchived": false,
+  "versionId": "34642e26-5f27-4e78-a6b9-6c08648137e6",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fc454c15-8d9f-469a-a609-2a1e09a1d02a",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -96
+      ],
+      "id": "4c27c4f2-62a7-4c08-b998-f24e4fff413f",
+      "name": "GetCustomerData"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      name: 'Jay Gatsby',\n      country: {\n        name: 'US'\n      }\n    }\n  },\n  {\n    json: {\n      name: 'José Arcadio Buendía',\n      country: {\n        name: 'CO'\n      }\n    }\n  },\n  {\n    json: {\n      name: 'Max Mustermann',\n      country: {\n        name: 'DE'\n      }\n    }\n  },\n  {\n    json: {\n      name: 'John Smith',\n      country: {\n        name: 'UK'\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        112
+      ],
+      "id": "c2571095-590b-455f-bdaa-24c1c341861c",
+      "name": "Characters"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "name",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        16
+      ],
+      "id": "107d430b-91cb-45b2-98e7-7ec785d3e040",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "GetCustomerData",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Characters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCustomerData": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Characters": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "QNKyFb8USmRQS98Q",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-17T08:24:01.411Z",
+      "updatedAt": "2026-09-17T08:24:01.411Z"
+    }
+  ],
+  "activeVersion": null
+}
