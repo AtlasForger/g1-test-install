@@ -1,0 +1,150 @@
+{
+  "id": "mJaNxaT6jHXG1q70",
+  "name": "Batch processing RSS feeds",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-17T20:32:16.662Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "01dfff56-d1bb-49b6-a75e-beab975c0b2a",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e454815a-a508-4334-b381-990b43f8147e",
+      "name": "ManialTrigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      url: 'https://medium.com/feed/n8n-io'\n    }\n  },\n    {\n    json: {\n      url: 'https://dev.to/feed/n8n'\n    }\n  \n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "88cd5661-173c-4cba-b5c4-a7d1ab37c5ed",
+      "name": "FeedURLs",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "1d9ad308-1fce-432b-96b5-fc8b8c055776",
+      "name": "BatchFeeds"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        64
+      ],
+      "id": "74cd8664-ee56-40a0-80e7-7f4d296d762a",
+      "name": "ReadFeed"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        288
+      ],
+      "id": "5618d646-70da-40f8-8a07-01723a3150eb",
+      "name": "ReadFeed1"
+    }
+  ],
+  "connections": {
+    "ManialTrigger": {
+      "main": [
+        [
+          {
+            "node": "FeedURLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FeedURLs": {
+      "main": [
+        [
+          {
+            "node": "BatchFeeds",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "ReadFeed1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BatchFeeds": {
+      "main": [
+        [],
+        [
+          {
+            "node": "ReadFeed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReadFeed": {
+      "main": [
+        [
+          {
+            "node": "BatchFeeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "mJaNxaT6jHXG1q70",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-17T20:32:16.670Z",
+      "updatedAt": "2026-09-17T20:32:16.670Z"
+    }
+  ],
+  "activeVersion": null
+}
