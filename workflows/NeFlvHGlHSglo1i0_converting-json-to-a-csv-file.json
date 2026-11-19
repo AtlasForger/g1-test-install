@@ -1,0 +1,94 @@
+{
+  "id": "NeFlvHGlHSglo1i0",
+  "name": "Converting JSON to a CSV file",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-17T08:05:43.841Z",
+  "updatedAt": "2026-11-07T18:10:19.494Z",
+  "isArchived": false,
+  "versionId": "a71202ed-ac98-4674-9310-ff45b42e1fe5",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/countries",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "175cccb8-9d92-443d-9411-de31f6573914",
+      "name": "GetCountries"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "14e62189-cb58-4529-be23-09a4dae95ccb",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "9c3d5b4e-8395-4ed3-a6b7-5f625dc8887a",
+      "name": "ConvertToCSV"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "GetCountries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCountries": {
+      "main": [
+        [
+          {
+            "node": "ConvertToCSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "NeFlvHGlHSglo1i0",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-17T08:05:43.845Z",
+      "updatedAt": "2026-09-17T08:05:43.845Z"
+    }
+  ],
+  "activeVersion": null
+}
