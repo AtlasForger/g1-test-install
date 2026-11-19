@@ -1,0 +1,70 @@
+{
+  "id": "pXaIlJxGFbVwYQ9O",
+  "name": "sub-workflow",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-27T12:17:14.571Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "b28c953e-7d7e-45ac-a52e-24e67e321730",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1d343f6f-f980-4b2a-8f62-9360f26019cc",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "56634df4-a9a7-45d3-a5df-fd3897ef9c77",
+      "name": "Send an Email",
+      "webhookId": "fcf203c7-faa8-447e-9522-c8c8e20447c9"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "pXaIlJxGFbVwYQ9O",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-27T12:17:14.577Z",
+      "updatedAt": "2026-09-27T12:17:14.577Z"
+    }
+  ],
+  "activeVersion": null
+}
