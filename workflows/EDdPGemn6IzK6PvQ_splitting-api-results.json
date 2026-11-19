@@ -1,0 +1,95 @@
+{
+  "id": "EDdPGemn6IzK6PvQ",
+  "name": "Splitting API results",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-17T08:12:55.136Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "b5a88a9c-25c7-4aca-abc6-07fc870dc92b",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d4871af6-e488-4037-acdf-68218d9e7982",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "url": "https://pokeapi.co/api/v2/pokemon?limit=5",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e25320de-4fad-4973-bc63-c602bc1bc00b",
+      "name": "GetPokemon"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e45c6beb-2088-4ff4-8b55-5bd916ec46c8",
+      "name": "SplitPokemon"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "GetPokemon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetPokemon": {
+      "main": [
+        [
+          {
+            "node": "SplitPokemon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "EDdPGemn6IzK6PvQ",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-17T08:12:55.139Z",
+      "updatedAt": "2026-09-17T08:12:55.139Z"
+    }
+  ],
+  "activeVersion": null
+}
