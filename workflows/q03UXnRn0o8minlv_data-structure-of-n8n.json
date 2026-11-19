@@ -1,0 +1,93 @@
+{
+  "id": "q03UXnRn0o8minlv",
+  "name": "Data structure of n8n",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-15T07:42:04.252Z",
+  "updatedAt": "2026-11-07T18:10:14.079Z",
+  "isArchived": false,
+  "versionId": "a508b328-1958-4f9e-ae7e-eab1d5e458fa",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "965d2c53-e396-4fae-b8ce-d5a49798625b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "var myContacts = [\n  {\n    json:{\n      name:\"Alice\",\n      email:{\n        personal:\"alice@home.com\",\n        work:\"alice@wonderland.org\"\n      }\n    }\n  },\n  {\n    json:{\n      name:\"Bob\",\n      email:{\n        personal:\"bob@mail.com\",\n        work:\"contact@thebuilder.com\",\n      }\n    }\n  }\n];\nreturn myContacts;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "17e470d7-4b4b-4d8c-9c97-b51d7ee96c92",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "let items=$input.all();\nitems[0].json.workEmail=items[0].json.email['work'];\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9432bd79-773a-4057-ab01-7fb9a616d21f",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "q03UXnRn0o8minlv",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-15T07:42:04.260Z",
+      "updatedAt": "2026-09-15T07:42:04.260Z"
+    }
+  ],
+  "activeVersion": null
+}
