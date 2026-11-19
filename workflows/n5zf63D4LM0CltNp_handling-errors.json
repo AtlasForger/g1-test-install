@@ -1,0 +1,118 @@
+{
+  "id": "n5zf63D4LM0CltNp",
+  "name": "Handling errors",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-18T08:29:41.282Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "49323176-3206-4d80-99a8-c755838e0cfa",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dcb604cf-34d7-4546-ae9a-789939387c1a",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "url": "https://httpstat.us/500",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "1e0461bc-66f7-4c02-a348-5db8830c2de3",
+      "name": "BadRequest",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        -96
+      ],
+      "id": "ff0438fe-a6ff-4c60-bb3f-39fb169534fa",
+      "name": "Success"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        96
+      ],
+      "id": "c7f8b5c7-62ac-4851-a5a4-19e6337903f9",
+      "name": "HandleError"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "BadRequest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BadRequest": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HandleError",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "n5zf63D4LM0CltNp",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-18T08:29:41.295Z",
+      "updatedAt": "2026-09-18T08:29:41.295Z"
+    }
+  ],
+  "activeVersion": null
+}
