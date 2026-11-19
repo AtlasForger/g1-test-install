@@ -1,0 +1,120 @@
+{
+  "id": "39mNUVKsESqU0PEL",
+  "name": "Section 2 - Order Report",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-10-10T00:38:55.819Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "42b2a367-ab74-4211-96aa-a0e769dace0e",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6cd15c0d-909e-4552-9569-7c96e148cbbc",
+      "name": "TriggerManual"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "WI8ZbCHe5af5rImZ",
+          "mode": "list",
+          "cachedResultName": "orders",
+          "cachedResultUrl": "/projects/WPlbCejcfCfwC8iz/datatables/WI8ZbCHe5af5rImZ"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b0ecdbee-51cf-4069-95e0-78af0db52773",
+      "name": "GetAllOrders"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "orderID"
+            },
+            {
+              "aggregation": "sum",
+              "field": "orderPrice"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "orderStatus",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "4c857183-76f5-47de-83f0-a93a7c235e46",
+      "name": "Summarize"
+    }
+  ],
+  "connections": {
+    "TriggerManual": {
+      "main": [
+        [
+          {
+            "node": "GetAllOrders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetAllOrders": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [
+    {
+      "id": "QBEAiR6QdapNmTR0",
+      "name": "n8n102",
+      "createdAt": "2026-10-04T12:34:14.569Z",
+      "updatedAt": "2026-10-04T12:34:14.569Z"
+    }
+  ],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "39mNUVKsESqU0PEL",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-10-10T00:38:55.825Z",
+      "updatedAt": "2026-10-10T00:38:55.825Z"
+    }
+  ],
+  "activeVersion": null
+}
