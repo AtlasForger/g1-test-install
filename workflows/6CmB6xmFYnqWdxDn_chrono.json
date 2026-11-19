@@ -1,0 +1,768 @@
+{
+  "id": "6CmB6xmFYnqWdxDn",
+  "name": "chrono",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-19T21:58:40.957Z",
+  "updatedAt": "2026-11-19T22:16:31.308Z",
+  "isArchived": false,
+  "versionId": "e2d4e45b-6bfd-4c80-9071-0d5147ff182f",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        368,
+        528
+      ],
+      "id": "641d5258-5df5-44e2-8b89-67a4321b6a13",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        864,
+        624
+      ],
+      "id": "61bfc09b-7ea8-43a2-9e8e-e73809f06a4b",
+      "name": "Get many workflows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "n8nApi": {
+          "id": "Gw8PNqd5e7jLcsZ2",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const dossier = $('CONFIGURATION').first().json.backupFolder;\n\nconst slug = (s) => String(s || 'sans-nom')\n  .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n  .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')\n  .slice(0, 60) || 'sans-nom';\n\nreturn $input.all().map(item => {\n  // On retire pinData (données de test, parfois réelles) avant la sauvegarde\n  const { pinData, ...wf } = item.json;\n  return {\n    json: {\n      id: wf.id,\n      name: wf.name,\n      path: `${dossier}/${wf.id}_${slug(wf.name)}.json`,\n      content: JSON.stringify(wf, null, 2),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1264,
+        528
+      ],
+      "id": "602a0bc9-1ab1-44e2-92fd-e924a4acbb6a",
+      "name": "PrepareFiles"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubOwner }}",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubRepo }}",
+          "mode": "name"
+        },
+        "filePath": "={{ $('PrepareFiles').item.json.path }}",
+        "fileContent": "={{ $('PrepareFiles').item.json.content }}",
+        "commitMessage": "={{ 'G1: backup of ' + $('PrepareFiles').item.json.name }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        240
+      ],
+      "id": "22639cdd-c70f-45e6-872c-32b70380cbd8",
+      "name": "UpdateFile",
+      "webhookId": "1c4342d9-85d7-45a2-8914-2965e6975f67",
+      "credentials": {
+        "githubApi": {
+          "id": "und3K5MaWuBpZH8A",
+          "name": "GitHub account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "67245f45-74b1-4313-8b15-214533078411",
+              "leftValue": "={{ $json.changed }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1936,
+        336
+      ],
+      "id": "dc18dcfb-4b43-4980-9a6f-b9eebe1e22da",
+      "name": "IsModified"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        432
+      ],
+      "id": "cac10a3a-551d-44e5-92f3-2cd196781c94",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 17
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        368,
+        720
+      ],
+      "id": "4eb44d23-0ac6-4c6c-bdb5-aca13024395a",
+      "name": "ScheduleTrigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "701917ec-f394-4da0-b106-dd079b0ba3d7",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "could not be found",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1712,
+        624
+      ],
+      "id": "805b598b-e77b-45af-90d4-67b657fc8bd7",
+      "name": "FileNotFound"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ 'Cannot read from GitHub for ' + $json.path + ': ' + $json.error }}"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        720
+      ],
+      "id": "470b002e-f820-4fdc-bd2d-b75b9663352a",
+      "name": "ConnectGitHubNotPossible"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "7849aa66-abb4-4832-bc3e-fe1e1d496176",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1040,
+        624
+      ],
+      "id": "ad9311c3-dfe3-4ef7-82e6-2b83243548cf",
+      "name": "WorkflowsReceived"
+    },
+    {
+      "parameters": {
+        "errorMessage": "No workflow received from the n8n API: check your API key and that n8n is reachable."
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        720
+      ],
+      "id": "4525e712-6128-44d5-b5f6-6dfdc5d6c347",
+      "name": "WorkflowsNotReceived"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ecd4f35-3934-44a7-83d4-498da4b73eb9",
+              "name": "subject",
+              "value": "={{ '⚠ Failed: ' + $json.workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "7e64f523-597e-4636-ad85-3bc17bfc5e14",
+              "name": "message",
+              "value": "=Workflow: {{ $json.workflow.name }}\nLast node: {{ $json.execution.lastNodeExecuted }} \nError: {{ $json.execution.error.message }} \nExecution: {{ $json.execution.url }}",
+              "type": "string"
+            },
+            {
+              "id": "3635784c-f99c-498b-b227-5d979ebe11bf",
+              "name": "alertFrom",
+              "value": "G1 Alerts <you@example.com>",
+              "type": "string"
+            },
+            {
+              "id": "0aa90fd0-0d13-40c4-b3a3-6f0b091a3cfd",
+              "name": "alertTo",
+              "value": "you@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        912,
+        144
+      ],
+      "id": "cae8ee18-ac25-4f2a-b654-41b78f543c68",
+      "name": "FormatAlert"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $json.alertFrom }}",
+        "toEmail": "={{ $json.alertTo }}",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.message }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1136,
+        144
+      ],
+      "id": "c4cfec58-6731-4578-926d-8865543dbe16",
+      "name": "SendAlert",
+      "webhookId": "746049ca-98e6-474c-8b9f-e94939b50049",
+      "credentials": {
+        "smtp": {
+          "id": "6DB4QE0ktbUYpRDz",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "30ae2fe5-8e01-420c-98a6-56f360fb4a9d",
+              "name": "githubOwner",
+              "value": "AtlasForger",
+              "type": "string"
+            },
+            {
+              "id": "6aff9b67-ea27-4f08-9468-fcb8f20efa7e",
+              "name": "githubRepo",
+              "value": "g1-test-install",
+              "type": "string"
+            },
+            {
+              "id": "f018ca1c-6d10-46fd-925d-0a7c82848505",
+              "name": "backupFolder",
+              "value": "workflows",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        624
+      ],
+      "id": "f7a1175d-48fb-4fca-8eba-fe327571c644",
+      "name": "CONFIGURATION"
+    },
+    {
+      "parameters": {
+        "content": "# G1 - Automatic n8n workflow backup to GitHub\n\nSaves every workflow of your n8n instance as a JSON file in a GitHub repository.\nOnly workflows that changed create a new commit.\n\n**Setup (about 10 minutes)**\n1. Create a private GitHub repository for your backups\n2. Fill in the CONFIGURATION node (red notes = required)\n3. Connect 3 credentials: n8n API (read-only key), GitHub API, SMTP\n4. Run the workflow manually once and check your repository\n5. Activate the workflow to enable the daily schedule",
+        "height": 320,
+        "width": 592,
+        "color": "#FFFF00"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        96
+      ],
+      "id": "1f3e5e2d-0914-42d1-bda1-1ca12b756f07",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## CONFIGURATION - required\nSet 3 values:\n- githubOwner: your GitHub username\n- githubRepo: the backup repository\n- backupFolder: folder inside the repository (default: workflows)",
+        "height": 256,
+        "width": 224,
+        "color": "#FF0000"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        368
+      ],
+      "id": "7883aa36-7f5b-40b9-9466-48c1b575e165",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Triggers\nThe Schedule Trigger runs the backup automatically.\nThe Manual Trigger is for tests: click \"Execute workflow\".",
+        "width": 224,
+        "color": "#FFFF00"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        576
+      ],
+      "id": "31304731-cfb2-4aa5-837c-35d6edf01d6a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Optional: change the time or frequency here.\nSet your timezone in the workflow settings, otherwise n8n uses its default one.",
+        "width": 304,
+        "color": "#33DF11"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        304,
+        848
+      ],
+      "id": "c79ce15c-43c8-47c0-aba8-0dbda44fb5eb",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Read your workflows\nReads all workflows through the n8n API (credential: n8n API, read-only key).\nIf 0 workflows come back, the run stops with an error instead of silently doing nothing.",
+        "height": 144,
+        "width": 384,
+        "color": "#FFFF00"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        800,
+        464
+      ],
+      "id": "fb49a2f1-1d00-4223-ab0c-deaeeab863af",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## One file per workflow\nBuilds one JSON file per workflow: folder/id_name.json.\nPinned test data is removed so it never ends up in your repository.",
+        "height": 176,
+        "color": "#FFFF00"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        336
+      ],
+      "id": "b6ec34ce-30ec-4f32-8608-ebbb8d22970b",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Commit only what changed\nChecks if the file already exists on GitHub (credential: GitHub API).\nMissing file: created. Different content: updated. Same content: nothing happens.\nAny other GitHub error stops the run with a clear message.",
+        "height": 768,
+        "width": 896,
+        "color": "#FFFF00"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        96
+      ],
+      "id": "452af4e5-9a33-497c-a1cf-e699936ed907",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 656,
+        "width": 896,
+        "color": "#000000"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        208
+      ],
+      "id": "a3b01b88-05bd-4a2d-8776-d6562abd8d14",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Error alert - required\nSends an email when a scheduled run fails.\nSet alertFrom and alertTo in FormatAlert, then connect your SMTP credential in SendAlert.",
+        "height": 96,
+        "width": 784,
+        "color": "#FF0000"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        32
+      ],
+      "id": "afe54b09-437d-4692-8a89-4505a6462511",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubOwner }}",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubRepo }}",
+          "mode": "name"
+        },
+        "filePath": "={{ $json.path }}",
+        "asBinaryProperty": false,
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1488,
+        528
+      ],
+      "id": "d56af37a-5207-4b06-a1b7-fd5f9aae9b2c",
+      "name": "GetFile",
+      "webhookId": "b2739854-e384-4a7f-8360-2eea87457e0e",
+      "credentials": {
+        "githubApi": {
+          "id": "und3K5MaWuBpZH8A",
+          "name": "GitHub account 3"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubOwner }}",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $('CONFIGURATION').first().json.githubRepo }}",
+          "mode": "name"
+        },
+        "filePath": "={{ $('PrepareFiles').item.json.path }}",
+        "fileContent": "={{ $('PrepareFiles').item.json.content }}",
+        "commitMessage": "={{ 'G1: backup of ' + $('PrepareFiles').item.json.name }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1936,
+        528
+      ],
+      "id": "e8b08ddf-fe07-4e37-a837-a1eadf6fbdd9",
+      "name": "CreateFile",
+      "webhookId": "5507b25c-7271-4382-9102-5456c07c5805",
+      "credentials": {
+        "githubApi": {
+          "id": "und3K5MaWuBpZH8A",
+          "name": "GitHub account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const nouveau = $('PrepareFiles').item.json.content;\nconst ancien = Buffer.from($json.content || '', 'base64').toString('utf8');\nreturn { json: { ...$json, changed: ancien !== nouveau } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1712,
+        336
+      ],
+      "id": "a20c8599-b6e4-4e81-b10f-814d7a6186c9",
+      "name": "Compare"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        688,
+        144
+      ],
+      "id": "0eacf3c5-c5e4-412c-b327-98f3c8d88120",
+      "name": "ErrorTrigger"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "CONFIGURATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        [
+          {
+            "node": "WorkflowsReceived",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PrepareFiles": {
+      "main": [
+        [
+          {
+            "node": "GetFile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IsModified": {
+      "main": [
+        [
+          {
+            "node": "UpdateFile",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ScheduleTrigger": {
+      "main": [
+        [
+          {
+            "node": "CONFIGURATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FileNotFound": {
+      "main": [
+        [
+          {
+            "node": "CreateFile",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ConnectGitHubNotPossible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WorkflowsReceived": {
+      "main": [
+        [
+          {
+            "node": "PrepareFiles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WorkflowsNotReceived",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FormatAlert": {
+      "main": [
+        [
+          {
+            "node": "SendAlert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONFIGURATION": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFile": {
+      "main": [
+        [
+          {
+            "node": "Compare",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "FileNotFound",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare": {
+      "main": [
+        [
+          {
+            "node": "IsModified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ErrorTrigger": {
+      "main": [
+        [
+          {
+            "node": "FormatAlert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "6CmB6xmFYnqWdxDn",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-11-19T21:58:40.965Z",
+      "updatedAt": "2026-11-19T21:58:40.965Z"
+    }
+  ],
+  "activeVersion": null
+}
