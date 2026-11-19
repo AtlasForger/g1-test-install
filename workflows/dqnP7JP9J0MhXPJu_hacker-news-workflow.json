@@ -1,0 +1,77 @@
+{
+  "id": "dqnP7JP9J0MhXPJu",
+  "name": "Hacker News workflow",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-08T21:39:45.381Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "113c20bd-bb32-42e8-b784-2aae648bd8b0",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "57588c76-d575-4101-8c54-55c4796c3552",
+      "name": "Execute workflow",
+      "notesInFlow": true,
+      "notes": "Execute the workflow"
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": 10,
+        "additionalFields": {
+          "keyword": "automation"
+        }
+      },
+      "type": "n8n-nodes-base.hackerNews",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "7453caca-3e5f-426d-99ac-49ca6f11ea33",
+      "name": "Hacker News",
+      "notesInFlow": true,
+      "notes": "Get the 10 latest articles."
+    }
+  ],
+  "connections": {
+    "Execute workflow": {
+      "main": [
+        [
+          {
+            "node": "Hacker News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "dqnP7JP9J0MhXPJu",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-08T21:39:45.395Z",
+      "updatedAt": "2026-09-08T21:39:45.395Z"
+    }
+  ],
+  "activeVersion": null
+}
