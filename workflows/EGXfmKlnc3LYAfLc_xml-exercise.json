@@ -1,0 +1,96 @@
+{
+  "id": "EGXfmKlnc3LYAfLc",
+  "name": "XML exercise",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-15T20:43:00.006Z",
+  "updatedAt": "2026-11-07T18:10:19.494Z",
+  "isArchived": false,
+  "versionId": "46076b56-d897-42e8-b4fd-54b4fa99415a",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "287d2a6f-7102-4589-89bb-7f63aa74e719",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://pokeapi.co/api/v2/pokemon",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "58a74baf-b042-4ed8-b4e8-bc86730a1dc8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "mode": "jsonToxml",
+        "dataPropertyName": "results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "255d14c9-2529-4eae-8c90-3417441b77fa",
+      "name": "XML"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "EGXfmKlnc3LYAfLc",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-15T20:43:00.009Z",
+      "updatedAt": "2026-09-15T20:43:00.009Z"
+    }
+  ],
+  "activeVersion": null
+}
