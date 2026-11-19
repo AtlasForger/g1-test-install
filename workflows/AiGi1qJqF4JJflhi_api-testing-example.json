@@ -1,0 +1,218 @@
+{
+  "id": "AiGi1qJqF4JJflhi",
+  "name": "API testing example",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-10-24T04:23:48.995Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "262a9637-669a-4958-82f7-2619c8e9ad5f",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        144
+      ],
+      "id": "077b95b7-e98d-4607-a15e-a19924ecd8b4",
+      "name": "ManualTrigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f001",
+              "name": "status",
+              "type": "number",
+              "value": 200
+            },
+            {
+              "id": "f002",
+              "name": "order_total",
+              "type": "number",
+              "value": 75
+            },
+            {
+              "id": "f003",
+              "name": "customer_email",
+              "type": "string",
+              "value": "alice@example.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -688,
+        144
+      ],
+      "id": "6530fa65-61c9-46ef-a277-0b08a35fbb05",
+      "name": "Mock API Response"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c001",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -464,
+        144
+      ],
+      "id": "efc6f628-2a25-4ac6-8d09-e3ab74572ac8",
+      "name": "Check Status"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f004",
+              "name": "result",
+              "type": "string",
+              "value": "Order processed successfully"
+            },
+            {
+              "id": "f005",
+              "name": "notify_email",
+              "type": "string",
+              "value": "={{ $json.customer_email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        32
+      ],
+      "id": "26d285cd-89ca-44af-8f19-beae8696c12e",
+      "name": "Handle Success"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f006",
+              "name": "result",
+              "type": "string",
+              "value": "API returned an error"
+            },
+            {
+              "id": "f007",
+              "name": "error_status",
+              "type": "number",
+              "value": "={{ $json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        240
+      ],
+      "id": "d791278b-95ad-41e9-98c1-6706ea2c3496",
+      "name": "Handle Failure"
+    }
+  ],
+  "connections": {
+    "ManualTrigger": {
+      "main": [
+        [
+          {
+            "node": "Mock API Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock API Response": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Handle Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [
+    {
+      "id": "4CcZvu4AebBPzF9o",
+      "name": "n8n103",
+      "createdAt": "2026-10-18T16:49:32.511Z",
+      "updatedAt": "2026-10-18T16:49:32.511Z"
+    }
+  ],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "AiGi1qJqF4JJflhi",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-10-24T04:23:49.000Z",
+      "updatedAt": "2026-10-24T04:23:49.000Z"
+    }
+  ],
+  "activeVersion": null
+}
