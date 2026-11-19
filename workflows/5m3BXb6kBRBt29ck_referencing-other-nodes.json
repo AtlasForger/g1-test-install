@@ -1,0 +1,127 @@
+{
+  "id": "5m3BXb6kBRBt29ck",
+  "name": "referencing other nodes",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-15T19:54:35.919Z",
+  "updatedAt": "2026-11-07T18:09:58.537Z",
+  "isArchived": false,
+  "versionId": "387d4fd7-6d86-4cff-9746-354a702a46aa",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7588a704-dd2c-4160-8669-ae51d7c8c20c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d7484ba0-0a15-46fb-800d-98cc5ee4fa77",
+      "name": "GetCustomers"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4e4d96de-012f-4acb-9f77-0f765cb2c260",
+              "name": "",
+              "value": "={{ $('GetCustomers').first().json.name }} is one of {{ $('CountCustomers').first().json.totalCustomers }} customers",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "a7e5dc0f-8d26-46be-a28e-e3b70e0f0a09",
+      "name": "SetSummary"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{totalCustomers:$input.all().length}}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "71393387-a657-469d-bef0-4198ec4dc8c7",
+      "name": "CountCustomers"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCustomers": {
+      "main": [
+        [
+          {
+            "node": "CountCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CountCustomers": {
+      "main": [
+        [
+          {
+            "node": "SetSummary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "5m3BXb6kBRBt29ck",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-15T19:54:35.925Z",
+      "updatedAt": "2026-09-15T19:54:35.925Z"
+    }
+  ],
+  "activeVersion": null
+}
