@@ -1,0 +1,114 @@
+{
+  "id": "c3wONQatKRf2X9GV",
+  "name": "Monitor Report Errors",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-19T10:29:54.289Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "3d10a856-484c-4678-b8bf-12a895797963",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b36b7920-ffdd-4b9d-a77a-e8fe06a0f17f",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7035f387-3641-46ea-9b84-8a63ef8dd5f8",
+              "name": "content",
+              "value": "=[54664f2893456a49c957735a7ba4f4bf] Workflow Error Alert - Workflow: {{ $json.workflow.name }} | Error: {{ $json.execution.error.message }} | Last node: {{ $json.execution.lastNodeExecuted }} | Execution URL: {{ $json.execution.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "3f823ba4-09b9-4780-9c62-832b78e584a1",
+      "name": "BuildErrorMessage"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "={{ $json.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "836f0521-56a4-4a0f-907a-cf48800787ad",
+      "name": "NotifyDiscord",
+      "webhookId": "02e3fcd3-018e-4ec7-b95f-16c2be783c35",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "cGt6kafIylhrRcE0",
+          "name": "n8n Quickstart S2 Error Discord Webhook account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "BuildErrorMessage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BuildErrorMessage": {
+      "main": [
+        [
+          {
+            "node": "NotifyDiscord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "c3wONQatKRf2X9GV",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-19T10:29:54.293Z",
+      "updatedAt": "2026-09-19T10:29:54.293Z"
+    }
+  ],
+  "activeVersion": null
+}
