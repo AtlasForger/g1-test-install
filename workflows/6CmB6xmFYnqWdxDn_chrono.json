@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-11-19T21:58:40.957Z",
-  "updatedAt": "2026-11-19T22:16:31.308Z",
+  "updatedAt": "2026-11-19T22:32:27.609Z",
   "isArchived": false,
-  "versionId": "e2d4e45b-6bfd-4c80-9071-0d5147ff182f",
+  "versionId": "78cc14cd-beff-4af8-9926-2c06a10a7167",
   "triggerCount": 0,
   "nodes": [
     {
@@ -36,8 +36,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "n8nApi": {
-          "id": "Gw8PNqd5e7jLcsZ2",
-          "name": "n8n account"
+          "id": "HKOvyeO41okB9sBz",
+          "name": "n8n account 3"
         }
       }
     },
