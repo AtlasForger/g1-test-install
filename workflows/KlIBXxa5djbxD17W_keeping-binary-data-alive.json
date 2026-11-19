@@ -1,0 +1,125 @@
+{
+  "id": "KlIBXxa5djbxD17W",
+  "name": "Keeping binary data alive",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-23T22:00:31.994Z",
+  "updatedAt": "2026-11-07T18:10:19.494Z",
+  "isArchived": false,
+  "versionId": "4653951d-c2a5-4029-b21a-c8ca456b3834",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        224,
+        176
+      ],
+      "id": "8d6d8fe9-952e-47ba-a183-ca4412908185",
+      "name": "When clicking Execute workflow"
+    },
+    {
+      "parameters": {
+        "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        176
+      ],
+      "id": "0539d73f-434d-4eff-bd64-50116b3e08a4",
+      "name": "Fetch PDF"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        176
+      ],
+      "id": "2fcd5c77-21f5-4394-a43d-d2e91c8c2902",
+      "name": "Extract Text from PDF"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        176
+      ],
+      "id": "8a85180d-a7dc-4e9a-8417-2492c5683075",
+      "name": "Convert to CSV"
+    }
+  ],
+  "connections": {
+    "When clicking Execute workflow": {
+      "main": [
+        [
+          {
+            "node": "Fetch PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch PDF": {
+      "main": [
+        [
+          {
+            "node": "Extract Text from PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text from PDF": {
+      "main": [
+        [
+          {
+            "node": "Convert to CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "KlIBXxa5djbxD17W",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-23T22:00:32.000Z",
+      "updatedAt": "2026-09-23T22:00:32.000Z"
+    }
+  ],
+  "activeVersion": null
+}
