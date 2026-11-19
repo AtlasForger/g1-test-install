@@ -1,0 +1,117 @@
+{
+  "id": "k6X1tD2nzTWaZwtS",
+  "name": "Section 1 - Academy Registration",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-22T21:23:37.194Z",
+  "updatedAt": "2026-11-07T18:10:07.057Z",
+  "isArchived": false,
+  "versionId": "eb295cc6-582b-4d04-bde8-5f8ebfd99cde",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "018c0707-8f40-4e50-b719-bedaae7aa7e2",
+      "name": "TriggerManual"
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/course/foundations/register",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "assessment_id",
+              "value": "54664f2893456a49c957735a7ba4f4bf"
+            },
+            {
+              "name": "workflow_name",
+              "value": "Section 1 - Academy Registration"
+            },
+            {
+              "name": "tag",
+              "value": "foundations-course"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "65ee2621-7d65-44c6-b674-1d6516676a76",
+      "name": "SubmitRegistration",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vzsboFVtCA88uCQM",
+          "name": "n8n Academy API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Academy Registration Workflow\n**Created by:** ATLAS\nDate: 22/09/2026\n\nThis workflow registers my n8n instance with the\nn8n Academy training system. It sends my assessment ID\nand workflow info to the Academy API.\n\nPart of: N8N101 Course, Section 1",
+        "height": 144,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        176
+      ],
+      "id": "09e449e3-e742-4d00-bd91-b84fd0b1d8ec",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "TriggerManual": {
+      "main": [
+        [
+          {
+            "node": "SubmitRegistration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [
+    {
+      "id": "cuEeqrwX2SLI1ig5",
+      "name": "n8n101",
+      "createdAt": "2026-09-22T21:24:33.518Z",
+      "updatedAt": "2026-09-22T21:24:33.518Z"
+    }
+  ],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "k6X1tD2nzTWaZwtS",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-09-22T21:23:37.207Z",
+      "updatedAt": "2026-09-22T21:23:37.207Z"
+    }
+  ],
+  "activeVersion": null
+}
