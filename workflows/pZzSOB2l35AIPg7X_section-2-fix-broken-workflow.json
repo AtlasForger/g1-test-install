@@ -1,0 +1,329 @@
+{
+  "id": "pZzSOB2l35AIPg7X",
+  "name": "Section 2 - Fix Broken Workflow",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-10-26T15:19:46.758Z",
+  "updatedAt": "2026-11-07T18:10:14.079Z",
+  "isArchived": false,
+  "versionId": "c8a0af9d-4ac0-4410-acb2-03f4afd3773b",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        128
+      ],
+      "id": "b0c2f886-1829-4820-8869-5761e359892a",
+      "name": "TriggerManual"
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/course/n8n103/orders-broken",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Assessment-ID",
+              "value": "54664f2893456a49c957735a7ba4f4bf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        176,
+        -16
+      ],
+      "id": "07cc817d-6f78-458f-8e2e-bb945ba70c85",
+      "name": "GetOrders",
+      "retryOnFail": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vzsboFVtCA88uCQM",
+          "name": "n8n Academy API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://learn.app.n8n.cloud/webhook/course/n8n103/customers-broken",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Assessment-id",
+              "value": "54664f2893456a49c957735a7ba4f4bf"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -48,
+        208
+      ],
+      "id": "c24e5801-cf77-4267-ac90-965f8b227eec",
+      "name": "GetCustomers",
+      "retryOnFail": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vzsboFVtCA88uCQM",
+          "name": "n8n Academy API Key"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "customer_id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        400,
+        128
+      ],
+      "id": "eda2690d-83e5-48ce-976f-78d729b6299a",
+      "name": "MergeOrdersCustomers"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://learn.app.n8n.cloud/webhook/course/n8n103/debug-result",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Assessment-id",
+              "value": "54664f2893456a49c957735a7ba4f4bf"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "enriched_orders",
+              "value": "={{ $json.enriched_orders }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        848,
+        128
+      ],
+      "id": "a9a5edf6-beee-401d-a42a-6e5aee689996",
+      "name": "SendToOrdersQueue",
+      "executeOnce": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vzsboFVtCA88uCQM",
+          "name": "n8n Academy API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d311efe-0ad8-40d2-a332-62ea7dd0f0fe",
+              "name": "customer_id",
+              "value": "unknown",
+              "type": "string"
+            },
+            {
+              "id": "6fbed7f6-a569-4a97-b1bc-06e8d0152a91",
+              "name": "company_name",
+              "value": "Unknown Company",
+              "type": "string"
+            },
+            {
+              "id": "c8f0e827-c874-4a94-97d8-a0818ea7e121",
+              "name": "subscription",
+              "value": "Starter",
+              "type": "string"
+            },
+            {
+              "id": "60e84d59-75be-4b21-bf08-abaa04b2b3f9",
+              "name": "account_manager",
+              "value": "Unassigned",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        272
+      ],
+      "id": "a8dfb6ca-c74a-4aaa-8fbc-9cf8cd221a3b",
+      "name": "SetFallbackCustomer"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "enriched_orders",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        624,
+        128
+      ],
+      "id": "ff552333-197d-4656-8c12-8695c3bdf01c",
+      "name": "AggregateOrders"
+    },
+    {
+      "parameters": {
+        "content": "# Section 2 - Fix Broken Workflow\n\nOwned By: Your Name\nLast Updated: Date\n\nIntentionally broken workflow for debugging practice.\nThis workflow had 3 issues that were fixed.\n\n## Expected Flow (when fixed)\n1. TriggerManual: Starts workflow\n2. GetOrders: Fetches order data from Academy API\n3. GetCustomers: Fetches customer data from Academy API\n4. SetFallbackCustomer: Provides fallback if GetCustomers fails\n5. MergeOrdersCustomers: Joins orders with customer data\n6. SendToOrdersQueue: Submits enriched orders for validation\n\n## Issues Fixed\n1. GetOrders: Missing Header Auth credential and X-Assessment-ID\n2. MergeOrdersCustomers: Match field was \"customerId\" instead of \"customer_id\"\n3. SendToOrdersQueue: Referenced deleted \"AggregateOrders\" node\n\n## Validation Endpoint\n- POST /webhook/course/foundations/s5/debug-result\n- Returns confirmation code when all issues are fixed\n\nPart of: n8n Foundations Program N8N103 Course, Section 2",
+        "height": 560,
+        "width": 832
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -96
+      ],
+      "id": "a3be08a2-dd32-4938-af16-3bcb40c6cfb5",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "TriggerManual": {
+      "main": [
+        [
+          {
+            "node": "GetOrders",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetOrders": {
+      "main": [
+        [
+          {
+            "node": "MergeOrdersCustomers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCustomers": {
+      "main": [
+        [
+          {
+            "node": "MergeOrdersCustomers",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "SetFallbackCustomer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MergeOrdersCustomers": {
+      "main": [
+        [
+          {
+            "node": "AggregateOrders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetFallbackCustomer": {
+      "main": [
+        [
+          {
+            "node": "MergeOrdersCustomers",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "AggregateOrders": {
+      "main": [
+        [
+          {
+            "node": "SendToOrdersQueue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": [
+    {
+      "id": "wi5QxjlgSWdbcooG",
+      "name": "foundations-course",
+      "createdAt": "2026-10-26T15:19:44.977Z",
+      "updatedAt": "2026-10-26T15:19:44.977Z"
+    }
+  ],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "pZzSOB2l35AIPg7X",
+      "projectId": "WPlbCejcfCfwC8iz",
+      "createdAt": "2026-10-26T15:19:46.761Z",
+      "updatedAt": "2026-10-26T15:19:46.761Z"
+    }
+  ],
+  "activeVersion": null
+}
